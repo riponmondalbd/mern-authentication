@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import transporter from "../config/nodeMailer.js";
 import userModel from "../model/userModel.js";
 
-// for register a user
+// register a user
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -45,13 +46,23 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    // sending welcome email
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Welcome to Positive World",
+      text: `Welcome to Positive World. Your account has been created by email id: ${email}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
     return res.json({ success: true });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// for login user
+// login user
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -94,7 +105,7 @@ export const login = async (req, res) => {
   }
 };
 
-// for log out user
+// log out user
 export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
