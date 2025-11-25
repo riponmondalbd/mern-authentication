@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../model/userModel.js";
 
+// for register a user
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -46,10 +47,11 @@ export const register = async (req, res) => {
 
     return res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
 
+// for login user
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -88,6 +90,21 @@ export const login = async (req, res) => {
 
     return res.json({ success: true });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// for log out user
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    });
+
+    return res.json({ success: true, message: "Logged Out" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
   }
 };
