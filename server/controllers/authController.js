@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import userModel from "../model/userModel.js";
 
 export const register = async (req, res) => {
@@ -9,6 +10,7 @@ export const register = async (req, res) => {
   }
 
   try {
+    // check if user already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       return res
@@ -16,15 +18,30 @@ export const register = async (req, res) => {
         .json({ success: false, message: "User already exists" });
     }
 
+    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // create new user
     const user = new userModel({
       name,
       email,
       password: hashedPassword,
     });
 
+    // save user to database
     await user.save();
+
+    // create token and set for cookie
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
