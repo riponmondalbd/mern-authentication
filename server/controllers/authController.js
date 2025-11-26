@@ -123,6 +123,7 @@ export const logout = async (req, res) => {
 // send verification OTP to user email
 export const sendVerifyOtp = async (req, res) => {
   try {
+    // request and receive userId from middleware
     const userId = req.userId;
 
     const user = await userModel.findById(userId);
@@ -162,6 +163,7 @@ export const sendVerifyOtp = async (req, res) => {
 
 // verify email using otp
 export const verifyEmail = async (req, res) => {
+  // request and receive userId from middleware
   const userId = req.userId;
   const { otp } = req.body;
 
@@ -196,5 +198,14 @@ export const verifyEmail = async (req, res) => {
     return res.json({ success: true, message: "Email Verified Successfully" });
   } catch (error) {
     return res.status(401).json({ success: false, message: error.message });
+  }
+};
+
+// check user is already authenticated or not
+export const isAuthenticated = async (req, res) => {
+  try {
+    return res.json({ success: true });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
   }
 };
