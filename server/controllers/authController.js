@@ -121,14 +121,16 @@ export const logout = async (req, res) => {
 };
 
 // send verification OTP to user email
-export const sendVerifyOtp = async () => {
+export const sendVerifyOtp = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.body;
 
     const user = await userModel.findById(userId);
 
     if (user.isAccountVerified) {
-      return res.json({ success: false, message: "Account already verified" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Account already verified" });
     }
 
     // make otp and set also expired time
@@ -154,7 +156,7 @@ export const sendVerifyOtp = async () => {
       message: "Verification OTP sent on Email",
     });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(401).json({ success: false, message: error.message });
   }
 };
 
@@ -192,6 +194,6 @@ export const verifyEmail = async (req, res) => {
     await user.save();
     return res.json({ success: true, message: "Email Verified Successfully" });
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(401).json({ success: false, message: error.message });
   }
 };

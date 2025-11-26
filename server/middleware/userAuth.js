@@ -1,18 +1,20 @@
 import jwt from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
-  const { token } = req.cookies;
+  const token = req.cookies?.token;
 
   // token not matched
   if (!token) {
-    return res.json({ success: false, message: "Not Authorized. Login Again" });
+    return res
+      .status(401)
+      .json({ success: false, message: "Not Authorized. Login Again" });
   }
 
   try {
     const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
 
     if (tokenDecode.id) {
-      req.body.userId = tokenDecode.id;
+      req.body = tokenDecode.id;
     } else {
       return res.json({
         success: false,
@@ -22,7 +24,7 @@ const userAuth = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.status(401).json({ success: false, message: error.message });
   }
 };
 
