@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router";
+import { ToastContainer } from "react-toastify";
 import EmailVerify from "./pages/EmailVerify";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -7,6 +8,7 @@ import ResetPassword from "./pages/ResetPassword";
 const App = () => {
   return (
     <div>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
