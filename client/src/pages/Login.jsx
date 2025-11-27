@@ -1,11 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { assets } from "../assets/assets";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [state, setState] = useState("Sign Up");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-linear-to-br from-blue-200 to-purple-400">
       <img
+        onClick={() => navigate("/")}
         src={assets.logo}
         alt="logo"
         className="absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer"
@@ -26,6 +33,8 @@ const Login = () => {
               <img src={assets.person_icon} alt="person icon" />
               <input
                 className="bg-transparent outline-none"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
                 type="text"
                 placeholder="Full Name"
                 required
@@ -39,6 +48,8 @@ const Login = () => {
             <img src={assets.mail_icon} alt="mail icon" />
             <input
               className="bg-transparent outline-none"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
               type="email"
               placeholder="Email"
               required
@@ -49,6 +60,8 @@ const Login = () => {
             <img src={assets.lock_icon} alt="lock icon" />
             <input
               className="bg-transparent outline-none"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               type="password"
               placeholder="Password"
               required
@@ -56,7 +69,12 @@ const Login = () => {
           </div>
 
           {/* forgot password */}
-          <p className="mb-4 text-indigo-500 cursor-pointer">Forgot password</p>
+          <p
+            onClick={() => navigate("/reset-password")}
+            className="mb-4 text-indigo-500 cursor-pointer"
+          >
+            Forgot password?
+          </p>
 
           {/* submit button */}
           <button className="w-full py-2.5 rounded-full bg-linear-to-r from-indigo-500 to-indigo-900 text-white font-medium">
