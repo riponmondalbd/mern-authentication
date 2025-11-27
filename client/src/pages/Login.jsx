@@ -67,14 +67,20 @@ const Login = () => {
         {state === "Sign Up" ? (
           <p className="text-gray-400 text-center text-xs mt-4">
             Already have an account?{" "}
-            <span className="text-blue-400 cursor-pointer underline">
+            <span
+              onClick={() => setState("Login")}
+              className="text-blue-400 cursor-pointer underline"
+            >
               Login
             </span>
           </p>
         ) : (
           <p className="text-gray-400 text-center text-xs mt-4">
             Don't have an account?{" "}
-            <span className="text-blue-400 cursor-pointer underline">
+            <span
+              onClick={() => setState("Sign Up")}
+              className="text-blue-400 cursor-pointer underline"
+            >
               Sign Up
             </span>
           </p>
