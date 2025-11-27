@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 export const AppContent = createContext();
 
 export const AppContextProvider = (props) => {
+  // eslint-disable-next-line react-hooks/immutability
+  axios.defaults.withCredentials = true;
+
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const [isLoggedin, setIsLoggedIn] = useState(false);
@@ -34,7 +37,7 @@ export const AppContextProvider = (props) => {
   };
 
   useEffect(() => {
-    getAuthState;
+    getAuthState();
   }, []);
 
   const value = {
