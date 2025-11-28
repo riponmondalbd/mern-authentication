@@ -1,8 +1,37 @@
+import React from "react";
 import { useNavigate } from "react-router";
 import { assets } from "../assets/assets";
 
 const EmailVerify = () => {
   const navigate = useNavigate();
+
+  const inputRefs = React.useRef([]);
+
+  // auto switch new field
+  const handleInput = (e, index) => {
+    if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  // auto switch previous field when delete last one
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && e.target.value === "" && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  // pet all 6 at a time
+  const handlePest = (e) => {
+    const paste = e.clipboardData.getData("text");
+    const pastArray = paste.split("");
+    pastArray.forEach((char, index) => {
+      if (inputRefs.current[index]) {
+        inputRefs.current[index].value = char;
+      }
+    });
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-linear-to-br from-blue-200 to-purple-400">
       <img
@@ -18,6 +47,26 @@ const EmailVerify = () => {
         <p className="text-center mb-6 text-indigo-300">
           Enter the 6-digit code sent to your email id.
         </p>
+
+        <div className="flex justify-between mb-8" onPaste={handlePest}>
+          {Array(6)
+            .fill(0)
+            .map((_, index) => (
+              <input
+                type="text"
+                maxLength="1"
+                key={index}
+                required
+                className="w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md"
+                ref={(e) => (inputRefs.current[index] = e)}
+                onInput={(e) => handleInput(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+              />
+            ))}
+        </div>
+        <button className="w-full py-3 bg-gradient-to-r from-indigo-500 to-indigo-900 text-white rounded-full">
+          Verify email
+        </button>
       </form>
     </div>
   );
