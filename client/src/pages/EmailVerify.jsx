@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { assets } from "../assets/assets";
@@ -62,6 +62,10 @@ const EmailVerify = () => {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    isLoggedIn && userData && userData.isAccountVerified && navigate("/");
+  }, [isLoggedIn, userData]);
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-linear-to-br from-blue-200 to-purple-400">
