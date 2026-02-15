@@ -10,15 +10,11 @@ const app = express();
 const port = process.env.PORT || 5000;
 connectDB();
 
-// const allowedOrigins = [
-//   "http://localhost:5173",
-//   "https://mern-authentication-orcin.vercel.app/",
-// ];
+const allowedOrigins = ["http://localhost:5173"];
 
 app.use(express.json());
 app.use(cookieParser());
-// app.use(cors({ origin: allowedOrigins, credentials: true }));
-app.use(cors());
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
 // api endpoints
 app.get("/", (req, res) => {
